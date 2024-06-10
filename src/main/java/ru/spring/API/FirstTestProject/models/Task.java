@@ -1,8 +1,13 @@
 package ru.spring.API.FirstTestProject.models;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,13 +20,15 @@ public class Task {
     private int id;
 
     @Column(name = "title")
+    @NotEmpty(message = "Title should be not empty")
+    @Size(max = 100, message = "Title should be shorter than 100 characters")
     private String title;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "duedate")
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     @Column(name = "completed")
     private boolean completed;
@@ -29,7 +36,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String title, String description, LocalDateTime dueDate, boolean completed) {
+    public Task(String title, String description, LocalDate dueDate, boolean completed) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
@@ -60,11 +67,11 @@ public class Task {
         this.description = description;
     }
 
-    public LocalDateTime getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -74,5 +81,16 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", dueDate=" + dueDate +
+                ", completed=" + completed +
+                '}';
     }
 }

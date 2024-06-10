@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.spring.API.FirstTestProject.models.Task;
 import ru.spring.API.FirstTestProject.repositories.TaskRepositories;
+import ru.spring.API.FirstTestProject.utils.TaskNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,16 @@ public class TaskService {
 
     public Task findOne(int id) {
         Optional<Task> foundTask = taskRepositories.findById(id);
-        return foundTask.orElse(null);
+        return foundTask.orElseThrow(TaskNotFoundException::new);
+    }
+
+    @Transactional
+    public void save(Task task) {
+        enrichTask(task);
+        taskRepositories.save(task);
+    }
+
+    private void enrichTask(Task task) {
+        task.setCompleted(false);
     }
 }
