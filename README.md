@@ -86,4 +86,4 @@ GET /tasks/1
 Возвращает: Статус HTTP 204 NO CONTENT.
 
 Пример запроса:
-DELETE /tasks?title=Задача%20для%20удаления
+DELETE /tasks?title=Заголовок
