@@ -9,7 +9,7 @@
 Возвращает: Список объектов в формате JSON.
 
 Пример запроса:
-GET /tasks?completed=true&date_range=day
+GET /api//tasks?completed=true&date_range=day
 
 ### Метод: GET /api/tasks/{id}
 
@@ -21,7 +21,7 @@ GET /tasks?completed=true&date_range=day
 Возвращает: Объект в формате JSON.
 
 Пример запроса:
-GET /tasks/1
+GET /api//tasks/1
 
 ### Метод: POST /api/tasks
 
@@ -45,10 +45,10 @@ GET /tasks/1
 Описание: Обновление задачи.
 
 Параметры:
-- title: Строка, новый заголовок задачи.
-- description: Строка, новое описание задачи.
-- dueDate: Дата, новый срок выполнения задачи.
-- completed: Булево значение, новый статус завершения задачи.
+- title (опционально): Строка, новый заголовок задачи.
+- description (опционально): Строка, новое описание задачи.
+- dueDate (опционально): Дата, новый срок выполнения задачи.
+- completed (опционально): Булево значение, новый статус завершения задачи.
 
 Возвращает: Объект в формате JSON.
 
@@ -86,4 +86,4 @@ GET /tasks/1
 Возвращает: Статус HTTP 204 NO CONTENT.
 
 Пример запроса:
-DELETE /tasks?title=Заголовок
+DELETE /api//tasks?title=Заголовок
