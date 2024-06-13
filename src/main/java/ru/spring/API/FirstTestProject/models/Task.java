@@ -1,14 +1,14 @@
 package ru.spring.API.FirstTestProject.models;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 
 @Entity
 @Table(name = "Task")
@@ -28,7 +28,10 @@ public class Task {
     private String description;
 
     @Column(name = "duedate")
-    private LocalDate dueDate;
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd.MM.yyyy")
+    @NotNull
+    private Date dueDate;
 
     @Column(name = "completed")
     private boolean completed;
@@ -36,7 +39,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String title, String description, LocalDate dueDate, boolean completed) {
+    public Task(String title, String description, Date dueDate, boolean completed) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
@@ -67,11 +70,11 @@ public class Task {
         this.description = description;
     }
 
-    public LocalDate getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -93,4 +96,5 @@ public class Task {
                 ", completed=" + completed +
                 '}';
     }
+
 }
