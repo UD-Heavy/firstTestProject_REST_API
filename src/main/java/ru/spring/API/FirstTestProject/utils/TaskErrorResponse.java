@@ -1,6 +1,6 @@
 package ru.spring.API.FirstTestProject.utils;
 
-public class TaskErrorResponse {
+public class TaskErrorResponse { // класс для конструктора возврата кастомной ошибки
     private String message;
     private long timestamp;
 

@@ -7,11 +7,10 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class TaskDTO {
+public class TaskDTO { // DTO для запроса получения задач
 
     @NotEmpty(message = "Title should be not empty")
     @Size(max = 100, message = "Title should be shorter than 100 characters")

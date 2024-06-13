@@ -3,13 +3,11 @@ package ru.spring.API.FirstTestProject.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
-public class TaskUpdatedDTO {
+public class TaskUpdatedDTO { // DTO для запроса обновления задачи
 
     @Size(max = 100, message = "Title should be shorter than 100 characters")
     private String title;

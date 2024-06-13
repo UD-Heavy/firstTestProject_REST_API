@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.spring.API.FirstTestProject.dto.TaskUpdatedDTO;
 import ru.spring.API.FirstTestProject.models.Task;
 import ru.spring.API.FirstTestProject.repositories.TaskRepositories;
@@ -14,15 +13,17 @@ import ru.spring.API.FirstTestProject.utils.TaskNotCreatedException;
 import ru.spring.API.FirstTestProject.utils.TaskNotFoundException;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
 public class TaskService {
+    // Класс помечен аннотацией @Service, что означает, что он является компонентом службы в Spring.
+    // Аннотация @Transactional(readOnly = true) указывает, что все методы этого класса являются транзакционными
+    // и только для чтения, за исключением тех, которые помечены как транзакционные для записи.
+    // Конструктор этого класса принимает TaskRepositories в качестве зависимости.
     private final TaskRepositories taskRepositories;
 
     @Autowired
@@ -30,6 +31,7 @@ public class TaskService {
         this.taskRepositories = taskRepositories;
     }
 
+    // Метод для поиска всех задач с фильтрацией по статусу завершенности и диапазону дат
     public List<Task> findAll(Boolean sortByCompleted, String dateRange) throws IncorrectDateException {
         if (!dateRange.isEmpty()) {
             LocalDate startDate = LocalDate.now();
@@ -47,21 +49,25 @@ public class TaskService {
     }
 
 
+    // Метод для поиска одной задачи по id
     public Task findOne(int id) {
         Optional<Task> foundTask = taskRepositories.findById(id);
         return foundTask.orElseThrow(TaskNotFoundException::new);
     }
 
+    // Метод для поиска одной задачи по title
     public Optional<Task> findByTitle(String title) {
         return taskRepositories.findByTitle(title);
     }
 
+    // Метод для сохранения новой задачи
     @Transactional
     public void save(Task task) {
         enrichTask(task);
         taskRepositories.save(task);
     }
 
+    // Метод для обновления существующей задачи
     @Transactional
     public Task update(TaskUpdatedDTO task, String title) throws RuntimeException {
         Task foundTask = taskRepositories.findByTitle(title).orElseThrow(TaskNotFoundException::new);
@@ -74,6 +80,7 @@ public class TaskService {
         return foundTask;
     }
 
+    // Метод для обновления статуса завершенности задачи
     @Transactional
     public Task updateComplete(Task task) {
         Task updatedTask = taskRepositories.findByTitle(task.getTitle()).orElseThrow(TaskNotFoundException::new);
@@ -82,6 +89,7 @@ public class TaskService {
         return updatedTask;
     }
 
+    // Метод для удаления задачи по названию
     @Transactional
     public void delete(String title) {
         Optional<Task> foundTask = taskRepositories.findByTitle(title);
@@ -89,10 +97,12 @@ public class TaskService {
         taskRepositories.deleteById(foundTask.get().getId());
     }
 
+    // Метод для обогащения задачи дополнительной информацией
     private void enrichTask(Task task) {
         task.setCompleted(false);
     }
 
+    // Метод сравнения задач и обновления полей
     private void compareAndUpdate(TaskUpdatedDTO newTask, Task oldTask) throws RuntimeException {
         // Сравнение и обновление title
         if (!Objects.equals(newTask.getTitle(), oldTask.getTitle()) && newTask.getTitle() != null) {

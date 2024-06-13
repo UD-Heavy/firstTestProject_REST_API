@@ -8,7 +8,7 @@ import ru.spring.API.FirstTestProject.models.Task;
 import ru.spring.API.FirstTestProject.services.TaskService;
 
 @Component
-public class TaskValidator implements Validator {
+public class TaskValidator implements Validator { // валидатор, проверяющий существование задачи
 
     private final TaskService taskService;
 
