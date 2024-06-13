@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import ru.spring.API.FirstTestProject.dto.TaskUpdatedDTO;
 import ru.spring.API.FirstTestProject.models.Task;
 import ru.spring.API.FirstTestProject.repositories.TaskRepositories;
 import ru.spring.API.FirstTestProject.utils.E_DATA_PERIODS;
@@ -61,7 +63,7 @@ public class TaskService {
     }
 
     @Transactional
-    public Task update(Task task, String title) {
+    public Task update(TaskUpdatedDTO task, String title) throws RuntimeException {
         Task foundTask = taskRepositories.findByTitle(title).orElseThrow(TaskNotFoundException::new);
         if (!Objects.equals(title, task.getTitle())
                 && task.getTitle() != null
@@ -91,7 +93,7 @@ public class TaskService {
         task.setCompleted(false);
     }
 
-    private void compareAndUpdate(Task newTask, Task oldTask) {
+    private void compareAndUpdate(TaskUpdatedDTO newTask, Task oldTask) throws RuntimeException {
         // Сравнение и обновление title
         if (!Objects.equals(newTask.getTitle(), oldTask.getTitle()) && newTask.getTitle() != null) {
             oldTask.setTitle(newTask.getTitle());
@@ -108,7 +110,7 @@ public class TaskService {
         }
 
         // Сравнение и обновление completed
-        if (newTask.isCompleted() != oldTask.isCompleted()) {
+        if (newTask.isCompleted() != null && (newTask.isCompleted() != oldTask.isCompleted())) {
             oldTask.setCompleted(newTask.isCompleted());
         }
     }

@@ -20,7 +20,7 @@ public class TaskUpdatedDTO {
     @JsonFormat(pattern = "dd.MM.yyyy")
     private Date dueDate;
 
-    private boolean completed;
+    private Boolean completed;
 
 
     public String getTitle() {
@@ -47,11 +47,11 @@ public class TaskUpdatedDTO {
         this.dueDate = dueDate;
     }
 
-    public boolean isCompleted() {
+    public Boolean isCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 }

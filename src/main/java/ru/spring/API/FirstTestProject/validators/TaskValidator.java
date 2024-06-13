@@ -1,4 +1,4 @@
-package ru.spring.API.FirstTestProject.Validators;
+package ru.spring.API.FirstTestProject.validators;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,11 +8,12 @@ import ru.spring.API.FirstTestProject.models.Task;
 import ru.spring.API.FirstTestProject.services.TaskService;
 
 @Component
-public class TaskExistValidator implements Validator {
+public class TaskValidator implements Validator {
+
     private final TaskService taskService;
 
     @Autowired
-    public TaskExistValidator(TaskService taskService) {
+    public TaskValidator(TaskService taskService) {
         this.taskService = taskService;
     }
 
@@ -25,7 +26,7 @@ public class TaskExistValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Task task = (Task) target;
 
-        if (taskService.findByTitle(task.getTitle()).isEmpty())
-            errors.rejectValue("title", "409", "Task with this title not exists");
+        if (taskService.findByTitle(task.getTitle()).isPresent())
+            errors.rejectValue("title", "409", "Task with this title already exists");
     }
 }

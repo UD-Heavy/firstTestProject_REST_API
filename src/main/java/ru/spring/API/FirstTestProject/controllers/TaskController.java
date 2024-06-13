@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import ru.spring.API.FirstTestProject.Validators.TaskExistValidator;
-import ru.spring.API.FirstTestProject.Validators.TaskValidator;
+import ru.spring.API.FirstTestProject.validators.TaskExistValidator;
+import ru.spring.API.FirstTestProject.validators.TaskValidator;
 import ru.spring.API.FirstTestProject.dto.TaskCompleteUpdateDTO;
 import ru.spring.API.FirstTestProject.dto.TaskDTO;
 import ru.spring.API.FirstTestProject.dto.TaskUpdatedDTO;
@@ -41,8 +41,8 @@ public class TaskController {
     }
 
     @GetMapping()
-    public List<TaskDTO> getTask(@RequestParam(value = "completed", required = false) Boolean completed,
-                                 @RequestParam(value = "date_range", required = false, defaultValue = "") String dateRange) {
+    public List<TaskDTO> getTasks(@RequestParam(value = "completed", required = false) Boolean completed,
+                                  @RequestParam(value = "date_range", required = false, defaultValue = "") String dateRange) {
         return taskService.findAll(completed, dateRange).stream().map(this::convertTaskToTaskDTO).collect(Collectors.toList());
     }
 
@@ -66,14 +66,12 @@ public class TaskController {
     }
 
     @PatchMapping()
-    public TaskUpdatedDTO updateTask(@RequestParam(value = "title", required = true) String title,
-                                     @RequestBody @Valid TaskUpdatedDTO taskDTO,
-                                     BindingResult bindingResult) {
+    public TaskUpdatedDTO updateTask(@RequestParam(value = "title") String title,
+                                     @RequestBody @Valid TaskUpdatedDTO taskDTO) {
 
-        Task task = convertTaskUpdatedDTOToTask(taskDTO);
+//        Task task = convertTaskUpdatedDTOToTask(taskDTO);
 
-
-        taskDTO = convertTaskToTAskUpdatedDTO(taskService.update(task, title));
+        taskDTO = convertTaskToTAskUpdatedDTO(taskService.update(taskDTO, title));
         return taskDTO;
     }
 
@@ -94,7 +92,7 @@ public class TaskController {
 
 
     @DeleteMapping()
-    public ResponseEntity<HttpStatus> deleteTask(@RequestParam(value = "title", required = true) String title) {
+    public ResponseEntity<HttpStatus> deleteTask(@RequestParam(value = "title") String title) {
         taskService.delete(title);
         return ResponseEntity.ok(HttpStatus.NO_CONTENT);
     }
@@ -134,6 +132,16 @@ public class TaskController {
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    private ResponseEntity<TaskErrorResponse> handleException(RuntimeException e) {
+        TaskErrorResponse response = new TaskErrorResponse(
+                "Invalid JSON parameter value",
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 
     private Task convertTaskDTOToTask(TaskDTO taskDTO) {
         return modelMapper.map(taskDTO, Task.class);
