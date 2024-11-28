@@ -35,6 +35,9 @@ public class TaskController { // Этот класс является Spring RES
     private final ModelMapper modelMapper;
     private final TaskService taskService;
 
+    public String Password = "password";
+    public String Login = "login";
+
     // Это конструктор, используемый для внедрения зависимостей в контроллер.
     @Autowired
     public TaskController(TaskService taskService, ModelMapper modelMapper, TaskValidator taskValidator, TaskExistValidator taskExistValidator) {
